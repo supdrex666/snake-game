@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b18">
+  <title>Snake Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <a class="brand" href="." aria-label="Snake Game home"><span class="brand-mark">S</span><span>SNAKE<span class="brand-muted">.GAME</span></span></a>
+      <div class="top-note"><span class="live-dot"></span> ARCADE MODE <span class="top-divider">/</span> EST. 1976</div>
+      <button class="sound-button" id="sound-button" type="button" aria-label="Toggle sound" title="Toggle sound">♫ <span>SOUND</span></button>
+    </header>
+
+    <section class="game-layout" aria-label="Snake game">
+      <aside class="side-panel left-panel">
+        <div class="eyebrow">PLAYER STATS</div>
+        <div class="stat-card score-card"><div class="stat-label">SCORE</div><div class="score-value" id="score">000</div><div class="stat-foot"><span class="tiny-arrow">↗</span> EAT TO GROW</div></div>
+        <div class="stat-card best-card"><div class="stat-label">BEST RUN</div><div class="best-value" id="best">000</div><div class="best-foot"><span>★</span> PERSONAL BEST</div></div>
+        <div class="tip-card"><div class="tip-icon">✳</div><div><div class="tip-title">STAY SHARP</div><p>One bite at a time.<br>Don't hit the walls.</p></div></div>
+        <div class="version">SNAKE v1.0 <span>•</span> BUILT FOR FUN</div>
+      </aside>
+
+      <section class="board-wrap" aria-label="Game board">
+        <div class="board-head"><div><span class="status-light" id="status-light"></span><span id="game-status">READY TO PLAY</span></div><div class="board-coords">GRID 20 × 20</div></div>
+        <div class="board-frame">
+          <canvas id="game" width="600" height="600" aria-label="Snake game board. Use arrow keys or WASD to move."></canvas>
+          <div class="overlay" id="overlay">
+            <div class="overlay-kicker"><span class="overlay-line"></span> CLASSIC ARCADE <span class="overlay-line"></span></div>
+            <div class="snake-word">SNAKE<span>.</span></div>
+            <div class="overlay-subtitle" id="overlay-subtitle">A LITTLE GAME OF<br>FOCUS &amp; FRUIT.</div>
+            <button class="play-button" id="play-button" type="button"><span>▶</span> <span id="play-label">START GAME</span></button>
+            <div class="overlay-help">PRESS <kbd>SPACE</kbd> TO START</div>
+          </div>
+          <div class="pause-overlay hidden" id="pause-overlay"><span>Ⅱ</span><strong>PAUSED</strong><small>PRESS SPACE TO RESUME</small></div>
+        </div>
+        <div class="board-foot"><span><span class="key-dot"></span> <span id="board-message">READY WHEN YOU ARE</span></span><span class="board-foot-right">NO RUSH. JUST DON'T STOP.</span></div>
+      </section>
+
+      <aside class="side-panel right-panel">
+        <div class="eyebrow">HOW TO PLAY</div>
+        <div class="controls-card">
+          <div class="control-row"><span class="control-icon">⌨</span><span>MOVE</span></div>
+          <div class="key-grid"><kbd>↑</kbd><div class="key-bottom"><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div></div>
+          <div class="control-separator"></div>
+          <div class="key-hint"><div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div><span>ALSO WORKS</span></div>
+          <div class="key-hint pause-hint"><div><kbd>SPACE</kbd></div><span>PAUSE / PLAY</span></div>
+        </div>
+        <div class="objective-card"><div class="objective-icon">◉</div><div><div class="objective-title">THE MISSION</div><p>Eat the glowing fruit.<br>Grow as long as you can.</p></div></div>
+        <div class="mobile-controls" aria-label="Touch controls"><button data-direction="up" aria-label="Move up">↑</button><div><button data-direction="left" aria-label="Move left">←</button><button data-direction="down" aria-label="Move down">↓</button><button data-direction="right" aria-label="Move right">→</button></div></div>
+      </aside>
+    </section>
+
+    <footer class="footer"><span>MADE FOR THE LOVE OF THE GAME <span class="footer-heart">♥</span></span><span>TAKE A BREATH. TAKE YOUR TIME.</span></footer>
+  </main>
+</body>
+</html>
