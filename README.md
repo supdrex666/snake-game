@@ -1,24 +1,6 @@
 # Snake Game
 
-A polished, responsive take on the classic Snake arcade game. The game runs directly in a modern web browser and has no build step or package dependencies.
-
-## Install and run locally
-
-1. Download the project by clicking **Code → Download ZIP** on this GitHub repository, then extract the ZIP file. Alternatively, clone it with Git:
-
-   `git clone https://github.com/supdrex666/snake-game.git`
-
-2. Open the project folder.
-3. Open `index.html` in a modern web browser.
-
-You can also serve the folder locally with Python:
-
-```bash
-cd snake-game
-python3 -m http.server 8000
-```
-
-Then visit [http://localhost:8000](http://localhost:8000).
+A polished, responsive take on the classic Snake arcade game. Open `index.html` in a browser to play—no build step or dependencies required.
 
 ## Controls
 
@@ -28,3 +10,7 @@ Then visit [http://localhost:8000](http://localhost:8000).
 - Use the sound button to enable or mute sound effects
 
 Eat the glowing fruit to grow and score points. Avoid the walls and your own tail. Your best run is saved in the browser.
+
+## Game-over memes
+
+When a run ends, the game requests a random meme from the no-key [Meme API](https://github.com/D3vd/Meme_Api). Memes marked NSFW or spoiler are skipped, and a fallback joke appears if the service or image is unavailable. Meme images are hosted by Reddit; use of the API requires an internet connection.
