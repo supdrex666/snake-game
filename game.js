@@ -10,6 +10,10 @@
   const status = document.querySelector('#game-status');
   const statusLight = document.querySelector('#status-light');
   const subtitle = document.querySelector('#overlay-subtitle');
+  const memeCard = document.querySelector('#meme-card');
+  const memeCaption = document.querySelector('#meme-caption');
+  const memeImage = document.querySelector('#meme-image');
+  const memeSource = document.querySelector('#meme-source');
   const boardMessage = document.querySelector('#board-message');
   const soundButton = document.querySelector('#sound-button');
 
@@ -59,6 +63,7 @@
       roundedRect(x, y, size - inset * 2, size - inset * 2, index === 0 ? 7 : 5);
       if (index === 0) {
         ctx.fillStyle = '#263c2a';
+        const eyeOffset = 5;
         const eyes = direction.x !== 0 ? [[direction.x > 0 ? x + 11 : x + 4, y + 5], [direction.x > 0 ? x + 11 : x + 4, y + 11]] : [[x + 5, direction.y > 0 ? y + 11 : y + 4], [x + 11, direction.y > 0 ? y + 11 : y + 4]];
         eyes.forEach(([ex, ey]) => { ctx.beginPath(); ctx.arc(ex, ey, 1.45, 0, Math.PI * 2); ctx.fill(); });
       }
@@ -89,6 +94,7 @@
   function start() {
     if (state === 'running') return;
     if (state === 'paused') { state = 'running'; pauseOverlay.classList.add('hidden'); setStatus('IN MOTION', true); boardMessage.textContent = 'NICE AND STEADY'; timer = setInterval(tick, speed()); return; }
+    memeCard.classList.add('hidden');
     snake = initialSnake.map(part => ({ ...part })); direction = { x: 1, y: 0 }; nextDirection = { ...direction };
     score = 0; scoreEl.textContent = format(score); placeFood(); state = 'running'; overlay.classList.add('hidden');
     setStatus('IN MOTION', true); boardMessage.textContent = 'NICE AND STEADY'; draw(); timer = setInterval(tick, speed());
@@ -107,7 +113,36 @@
     if (record) { best = score; localStorage.setItem('snake-best', String(best)); bestEl.textContent = format(best); }
     setStatus('RUN COMPLETE', false); boardMessage.textContent = 'GOOD RUN. GO AGAIN?';
     subtitle.innerHTML = record && score > 0 ? 'NEW PERSONAL BEST!<br>THAT WAS A GOOD RUN.' : `YOU SCORED ${format(score)} POINTS.<br>READY FOR ANOTHER?`;
+    showGameOverMeme();
     playLabel.textContent = 'PLAY AGAIN'; overlay.classList.remove('hidden'); beep(160, .18); draw();
+  }
+
+  async function showGameOverMeme() {
+    memeCard.classList.remove('hidden');
+    memeImage.hidden = true;
+    memeSource.hidden = true;
+    memeCaption.textContent = 'Finding a meme to match that run…';
+    try {
+      const response = await fetch('https://meme-api.com/gimme/memes', { headers: { Accept: 'application/json' } });
+      if (!response.ok) throw new Error('Meme API request failed');
+      const meme = await response.json();
+      const imageUrl = new URL(meme.url);
+      const sourceUrl = new URL(meme.postLink);
+      if (meme.nsfw || meme.spoiler || imageUrl.protocol !== 'https:' || !/^https:\/\/(i|preview)\.redd\.it$/i.test(imageUrl.origin) || sourceUrl.protocol !== 'https:' || !['www.reddit.com', 'reddit.com', 'redd.it'].includes(sourceUrl.hostname)) {
+        throw new Error('Meme was not suitable to display');
+      }
+      memeCaption.textContent = meme.title || 'Somehow, the meme also saw that run.';
+      memeImage.onload = () => { memeImage.hidden = false; };
+      memeImage.onerror = () => {
+        memeImage.hidden = true;
+        memeCaption.textContent = 'Even the meme gave up on that run. Try again.';
+      };
+      memeImage.src = imageUrl.href;
+      memeSource.href = meme.postLink;
+      memeSource.hidden = false;
+    } catch (_) {
+      memeCaption.textContent = 'Even the meme API feels bad for that run. Try again.';
+    }
   }
 
   function tick() {
@@ -135,6 +170,7 @@
     if (key === ' ' || key === 'enter') { event.preventDefault(); if (state === 'ready' || state === 'over') start(); else pause(); }
   });
   playButton.addEventListener('click', start);
+  playButton.addEventListener('click', () => memeCard.classList.add('hidden'));
   document.querySelectorAll('[data-direction]').forEach(button => button.addEventListener('pointerdown', event => {
     event.preventDefault(); const dirs = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }; turn(...dirs[button.dataset.direction]);
   }));
